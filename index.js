@@ -1,7 +1,7 @@
 const {readFileSync} = require("fs");
 const prompt = require("prompt");
 const {load} = require("js-yaml");
-const {servers, auth, api_url, ssl} = load(readFileSync("./servers.yml", "utf8"));
+const {servers, auth, api_url, ssl} = load(readFileSync("./config.yml", "utf8"));
 const {createInterface} = require("readline");
 require("colors");
 var socket;
