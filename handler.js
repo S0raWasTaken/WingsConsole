@@ -1,19 +1,18 @@
 require("colors");
 const fetch = require("node-fetch");
+var seeStats = 0
 
 exports.run = (socket, token, keepAliveInfo) => {
     
     socket.on("open", () => {
-        socket.send({
-            "event": "auth",
-            "args": `${token}`
-        });
+        socket.send(`{"event": "auth","args": ["${token}"]}`);
     });
 
     socket.on("message", message => {
-        if (message.event == "token expiring" || message.event == "token expired") {
+        message = JSON.parse(message);
+        if (message.event == "token expiring" || message.event == "token expired" || message.event == "jwt error") {
             const response = keepAlive(keepAliveInfo, socket);
-            if (response = "error") {
+            if (response == "error") {
                 console.log("Failed sending KeepAlive packet to the WebSocket".red);
                 process.exit(2);
             }
@@ -26,33 +25,34 @@ exports.run = (socket, token, keepAliveInfo) => {
                 break;
             case "console output":
                 const msg = message.args[0];
-                const type = msg.split("/")[1].split("]")[0];
-                if (type == "INFO") {
-                    console.log(`${msg}`);
-                } else if (type == "WARN") {
-                    console.log(`${msg}`.yellow);
-                } else if (type == "ERROR" || type == "SEVERE") {
-                    console.log(`${msg}`.red);
-                }
+                console.log(msg);
                 break;
             case "status":
                 console.log("State: "+message.args[0]);
                 break;
             case "stats":
-                const msg = JSON.parse(message.args[0]);
-                const mb = msg.memory_bytes/1024/1024;
-                const mblimit = msg.memory_limit_bytes/1024/1024;
+                if (seeStats < 1) return;
+                const msg1 = JSON.parse(message.args[0]);
+                const mb = msg1.memory_bytes/1024/1024;
+                const mblimit = msg1.memory_limit_bytes/1024/1024;
 
                 console.log("----- Status -----".yellow);
                 console.log("RAM: ".green+`${mb}mb / ${mblimit}mb`.red);
-                console.log("CPU: ".green+`${msg.cpu_absolute}%`.red);
-                console.log("RX: ".green+`${msg.rx_bytes} bytes`.red);
-                console.log("TX: ".green+`${msg.tx_bytes} bytes`.red);
-                console.log("DISK: ".green+`${msg.disk_bytes/1024/1024}mb\n`);
-                console.log("STATE: ".green+`${msg.state}`.red);
+                console.log("CPU: ".green+`${msg1.cpu_absolute}%`.red);
+                console.log("RX: ".green+`${msg1.rx_bytes} bytes`.red);
+                console.log("TX: ".green+`${msg1.tx_bytes} bytes`.red);
+                console.log("DISK: ".green+`${msg1.disk_bytes/1024/1024}mb\n`);
+                console.log("STATE: ".green+`${msg1.state}`.red);
 
         }
- 
+    });
+    const {createInterface} = require("readline");
+    const rl = createInterface({
+        input: process.stdin,
+        output: process.stdout
+    });
+    rl.on("line", line => {
+        this.line(line, socket);
     });
 }
 
@@ -68,14 +68,15 @@ exports.line = (line, socket) => {
     if (cmd.startsWith(";")) {
         switch(cmd.slice(1)) {
             case "stats":
-                socket.send({ "event": "send stats" });
+                seeStats++;
+                socket.send('{ "event": "send stats" }');
                 break;
             case "power":
                 if (!args[0]) return console.log("No power action specified".red);
-                socket.send({ "event": "set state", "args": `${args[0]}` });
+                socket.send(`{ "event": "set state", "args": ["${args[0]}"] }`);
                 break;
             case "logs":
-                socket.send({ "event": "send logs" });
+                socket.send('{ "event": "send logs" }');
                 break;
             default:
                 console.log("Commands: stats, power <kill/restart/stop/start>, logs");
@@ -86,7 +87,7 @@ exports.line = (line, socket) => {
 }
 
 function command(socket, line) {
-    socket.send({ "event": "send command", "args": `${line}` });
+    socket.send(`{ "event": "send command", "args": ["${line}"] }`);
 }
 
 async function keepAlive(keepAliveInfo, socket) {
@@ -100,7 +101,8 @@ async function keepAlive(keepAliveInfo, socket) {
             "Content-Type": "application/json",
             "Authorization": `Bearer ${auth}`,
         }
-    }).then(response => serverResponse = response.data)
+    }).then(response => serverResponse = response.json())
+    .then(body => serverResponse = body.data)
     .catch(error => {
         console.error(error);
         serverResponse = "error";
@@ -110,5 +112,5 @@ async function keepAlive(keepAliveInfo, socket) {
         return "error";
     }
 
-    socket.send({ "event": "auth", "args": `${serverResponse.token}` });
+    socket.send(`{ "event": "auth", "args": ["${serverResponse.token}"] }`);
 }

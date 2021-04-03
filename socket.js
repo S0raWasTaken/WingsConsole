@@ -8,7 +8,7 @@ const WebSocket = require("ws");
  * @param {String} api Api url
  * @param {Boolean} ssl boolean
  */
-exports.run = (server, auth, api, ssl) => {
+exports.run = async (server, auth, api, ssl) => {
     var protocol;
     if (ssl) {
         protocol = "https";
@@ -18,14 +18,15 @@ exports.run = (server, auth, api, ssl) => {
     }
 
     var serverResponse; 
-    fetch(`${protocol}://${api}/api/client/servers/${server}/websocket`, {
+    await fetch(`${protocol}://${api}/api/client/servers/${server}/websocket`, {
         "method": "GET",
         "headers": {
             "Accept": "application/json",
             "Content-Type": "application/json",
             "Authorization": `Bearer ${auth}`,
         }
-    }).then(response => serverResponse = response.data)
+    }).then(response => response.json())
+    .then(body => serverResponse = body.data)
     .catch(error => {
         console.error(error);
         serverResponse = "error";
@@ -34,6 +35,7 @@ exports.run = (server, auth, api, ssl) => {
         return console.log("\n\nAPI request failed, aborting...".red);
     }
 
+    console.log(serverResponse.socket);
     var token = serverResponse.token;
     const wss = serverResponse.socket;
 
@@ -48,5 +50,4 @@ exports.run = (server, auth, api, ssl) => {
 
     const handler = require("./handler");
     handler.run(socket, token, keepAliveInfo);
-    return socket;
 }

@@ -33,9 +33,6 @@ prompt.get(['server'], (_err, response) => {
     if (!auth) {
         return console.log("Auth not found, aborting...".red);
     }
-
     const skt = require("./socket");
-    const socket = skt.run(servers[response.server], auth, api_url, ssl);
-    const reader = require("./reader");
-    reader.run(socket);
+    skt.run(servers[response.server], auth, api_url, ssl);
 });
