@@ -4,12 +4,6 @@ const {load} = require("js-yaml");
 const {servers, auth, api_url, ssl} = load(readFileSync("./config.yml", "utf8"));
 const {createInterface} = require("readline");
 require("colors");
-var socket;
-
-const rl = createInterface({
-    input: process.stdin,
-    output: process.stdout
-});
 
 prompt.start();
 console.log("Server List:".green);
@@ -41,15 +35,7 @@ prompt.get(['server'], (_err, response) => {
     }
 
     const skt = require("./socket");
-    socket = skt.run(servers[response.server], auth, api_url, ssl);
-
-});
-var n = 1;
-rl.on(line => {
-    if (n == 1) {
-        n--;
-        return;
-    }
-    const handler = require("./handler");
-    handler.line(line, socket);
+    const socket = skt.run(servers[response.server], auth, api_url, ssl);
+    const reader = require("./reader");
+    reader.run(socket);
 });
