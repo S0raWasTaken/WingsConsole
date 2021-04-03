@@ -1,0 +1,20 @@
+# Server configuration file
+
+# Your pterodactyl panel url
+api-url: 'panel.example.com'
+
+# If your Wings are on port 8443, mark it true, if it's in 8080, false. Else set it to the port number
+ssl: false
+
+# Please, don't name your server "invalid", else you will have problems running the script
+# Use small ID for the server ID
+# Example long id: 1a7ce997-259b-452e-8b4e-cecc464142ca
+# Example small id: 1a7ce997
+# You can also change the "server1", "server2"... to custom names
+servers:
+  server1: 'serverID'
+  server2: 'serverID'
+  server3: 'serverID'
+
+# Pterodactyl API Key
+auth:
