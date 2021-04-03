@@ -25,6 +25,7 @@ exports.run = (socket, token, keepAliveInfo) => {
                 break;
             case "console output":
                 const msg = message.args[0];
+                if (!msg.includes("[")) break;
                 console.log(msg);
                 break;
             case "status":
@@ -32,6 +33,7 @@ exports.run = (socket, token, keepAliveInfo) => {
                 break;
             case "stats":
                 if (seeStats < 1) return;
+                seeStats--;
                 const msg1 = JSON.parse(message.args[0]);
                 const mb = msg1.memory_bytes/1024/1024;
                 const mblimit = msg1.memory_limit_bytes/1024/1024;
