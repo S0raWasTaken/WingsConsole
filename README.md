@@ -17,12 +17,25 @@ curl -sL https://deb.nodesource.com/setup_14.x | sudo bash -
 sudo apt install nodejs -y
 ```
 
-Clone this repository and run
+Clone this repository or pick a release and run:
 ```sh
 npm i --save
 ```
 
-Now you can start it using
+Now you can start it using:
 ```sh
 node .
 ```
+
+
+### Built-in Commands
+
+#### Every built-in command is prefixed with `;`
+
+Command list:
+- **;logs**
+  - Pulls logs from the console
+- **;stats**
+  - Sends server status, things like RAM and CPU usage
+- **;power [start/stop/restart/kill]**
+  - Does exactly what you think
