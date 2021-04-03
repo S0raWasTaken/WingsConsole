@@ -6,7 +6,7 @@
 
 - This project was made using NodeJS 14, I don't know if it works in other versions below it
 
-Install NodeJS from the (official website)[https://nodejs.org/en/download/]
+Install NodeJS from the [official website](https://nodejs.org/en/download/)
 or if you're a linux user (Ubuntu/Debian based distros):
 ```sh
 sudo apt update
