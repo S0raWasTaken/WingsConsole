@@ -45,8 +45,6 @@ exports.run = (socket, token, keepAliveInfo) => {
                 console.log("----- Status -----".yellow);
                 console.log("RAM: ".green+`${mb}mb / ${mblimit}mb`.red);
                 console.log("CPU: ".green+`${msg1.cpu_absolute}%`.red);
-                console.log("RX: ".green+`${msg1.rx_bytes} bytes`.red);
-                console.log("TX: ".green+`${msg1.tx_bytes} bytes`.red);
                 console.log("DISK: ".green+`${(msg1.disk_bytes/1024/1024).toFixed(2)}mb\n`);
                 console.log("STATE: ".green+`${msg1.state}`.red);
 
