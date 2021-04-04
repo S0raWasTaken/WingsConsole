@@ -1,5 +1,9 @@
 require("colors");
+const {readFileSync, readFile} = require("fs");
 const fetch = require("node-fetch");
+const {load} = require("js-yaml");
+const {servers, auth, api_url, ssl} = load(readFileSync("./config.yml", "utf-8"));
+var rline;
 var seeStats = 0
 
 exports.run = (socket, token, keepAliveInfo) => {
@@ -48,6 +52,8 @@ exports.run = (socket, token, keepAliveInfo) => {
 
         }
     });
+}
+exports.reader = (socket) => {
     const {createInterface} = require("readline");
     const rl = createInterface({
         input: process.stdin,
@@ -56,8 +62,9 @@ exports.run = (socket, token, keepAliveInfo) => {
     rl.on("line", line => {
         this.line(line, socket);
     });
+    rline = rl;
+    
 }
-
 /**
  * 
  * @param {String} line input
@@ -80,12 +87,52 @@ exports.line = (line, socket) => {
             case "logs":
                 socket.send('{ "event": "send logs" }');
                 break;
+            case "server":
+                if (!args[0]) return console.log("No server specified".red+"Usage: ;server <list/server>".yellow);
+                if (args[0].toLowerCase() == "list") {
+                    console.log("Server list: ".green);
+
+                    for (var index in servers) {
+                        console.log(`>  ${index}`.red+`: ${servers[index]}`.green);
+                    }
+                    return;
+                }
+                this.reconnect(socket, args[0]);
+                break;
             default:
-                console.log("Commands: stats, power <kill/restart/stop/start>, logs");
+                console.log("Commands: stats, server <list/server>, power <kill/restart/stop/start>, logs");
         }
     } else {
         command(socket, line);
     }
+}
+
+/**
+ * 
+ * @param {WebSocket} socket 
+ * @param {String} server String that matches with a server name in config.yml 
+ * @returns 
+ */
+exports.reconnect = (socket, server) => {
+    var i = 0;
+    
+    for (var index in servers) {
+        if (index != server) i++;
+        else {
+            i = 0;
+            break;
+        }
+    }
+    if (i > 0) {
+        return console.log("Specified server doesn't exist.\nFor a list of servers, run".red
+        +" ;server list".yellow);
+    }
+    const skt = require("./socket");
+    socket.close();
+    rline.close();
+    console.log("Socket has been closed!".green);
+    skt.run(servers[server], auth, api_url, ssl);
+    console.log("Connecting to the new server...".yellow);
 }
 
 function command(socket, line) {

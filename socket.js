@@ -49,4 +49,5 @@ exports.run = async (server, auth, api, ssl) => {
 
     const handler = require("./handler");
     handler.run(socket, token, keepAliveInfo);
+    handler.reader(socket);
 }
