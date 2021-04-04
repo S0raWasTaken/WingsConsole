@@ -35,7 +35,6 @@ exports.run = async (server, auth, api, ssl) => {
         return console.log("\n\nAPI request failed, aborting...".red);
     }
 
-    console.log(serverResponse.socket);
     var token = serverResponse.token;
     const wss = serverResponse.socket;
 
