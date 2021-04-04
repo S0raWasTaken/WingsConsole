@@ -35,15 +35,15 @@ exports.run = (socket, token, keepAliveInfo) => {
                 if (seeStats < 1) return;
                 seeStats--;
                 const msg1 = JSON.parse(message.args[0]);
-                const mb = msg1.memory_bytes/1024/1024;
-                const mblimit = msg1.memory_limit_bytes/1024/1024;
+                const mb = (msg1.memory_bytes/1024/1024).toFixed(2);
+                const mblimit = (msg1.memory_limit_bytes/1024/1024).toFixed(2);
 
                 console.log("----- Status -----".yellow);
                 console.log("RAM: ".green+`${mb}mb / ${mblimit}mb`.red);
                 console.log("CPU: ".green+`${msg1.cpu_absolute}%`.red);
                 console.log("RX: ".green+`${msg1.rx_bytes} bytes`.red);
                 console.log("TX: ".green+`${msg1.tx_bytes} bytes`.red);
-                console.log("DISK: ".green+`${msg1.disk_bytes/1024/1024}mb\n`);
+                console.log("DISK: ".green+`${(msg1.disk_bytes/1024/1024).toFixed(2)}mb\n`);
                 console.log("STATE: ".green+`${msg1.state}`.red);
 
         }
