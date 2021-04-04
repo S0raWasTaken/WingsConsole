@@ -39,3 +39,8 @@ Command list:
   - Sends server status, things like RAM and CPU usage
 - **;power [start/stop/restart/kill]**
   - Does exactly what you think
+
+## TODO
+
+- A command to quickly change between servers and see the available server list
+  - probably ;server <list/server>
