@@ -88,8 +88,9 @@ sudo apt remove nodejs
 ```
 
 ### If you didn't install it using the install script:
-> Same applies to Windows users
+
 - Simply delete your installation folder
+  > Same applies to Windows users
 
 - If you want to uninstall nodejs:
   - Linux users:
@@ -98,6 +99,6 @@ sudo apt remove nodejs
   ```
   - Windows users:
     - Open your file manager
-    - Go to C:\Program Files (or D:\ depending if you installed it on a separate disk or partition)
+    - Go to `C:\Program Files\` (or `D:\` depending if you installed it on a separate disk or partition)
     - Locate the "nodejs" folder
-    - Delete it 
+    - **Delete it**
