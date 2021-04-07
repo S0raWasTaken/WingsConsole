@@ -3,34 +3,43 @@
 # Installation script for the WingsConsole
 # Made by S0raWasTaken
 
+# You need Super User privileges to run this script, though IT SHOULD NOT BE EXECUTED AS ROOT
 # ----- Please do not execute this script before understanding what it does -----
 
 # Checks if the user is running the script with superuser permissions
-if [ "$EUID" -ne 0 ]; then
-    echo "This is an installation script, please run it as a superuser"
-    echo "Also, don't forget to read it first!"
+if [ "$EUID" -eq 0 ]; then
+    echo "please do not run this script with sudo or with root privileges"
+    echo "if you still want to run this script as root, remove the lines 10 to 14 in the install.sh"
     exit 2
 fi
+
+echo "Although this script shouldn't be running as SuperUser, it will ask you for your permission to install packages"
+echo "and write a file in /usr/local/bin"
+echo ""
+echo "The following packages will be installed after your confirmation (If already not installed):"
+echo "curl, nodejs, git, WingsConsole"
 
 # ----- Begin installation of NodeJS v14 -----
 
 # Running apt update for a safe install
-apt update
+sudo apt update
 # If curl isn't installed, it will be installed
-apt install -y curl
+sudo apt install -y curl
 
 # Adding NodeJS v14 repo
-curl -sL https://deb.nodesource.com/setup_14.x | bash -
+curl -sL https://deb.nodesource.com/setup_14.x | sudo bash -
 
 # Installing
-apt install -y nodejs
+sudo apt install -y nodejs
 # ----- Finish installing NodeJS v14 -----
 
 
 # ----- Cloning the github repo -----
 
 # If git isn't installed, it will be installed
-apt install -y git
+sudo apt install -y git
+
+cd ~
 git clone https://github.com/S0raWasTaken/WingsConsole.git
 
 # Move the cloned repo to the home directory
@@ -89,19 +98,20 @@ fi
 
 # Creating the custom command
 if [ -z "$cmd" ]; then
+
     # Creating the file
-    echo "cd ~/.WingsConsole; node ." >> "/usr/local/bin/console"
+    sudo echo "cd ~/.WingsConsole; node ." >> "/usr/local/bin/console"
     
     # Giving execution permissions to the file
-    chmod +x "/usr/local/bin/console"
+    sudo chmod +x "/usr/local/bin/console"
 
     echo "Installation complete!"
 else
     # Creating the file
-    echo "cd ~/.WingsConsole; node ." >> "/usr/local/bin/$cmd"
+    sudo echo "cd ~/.WingsConsole; node ." >> "/usr/local/bin/$cmd"
     
     # Giving execution permissions to the file
-    chmod +x "/usr/local/bin/$cmd"
+    sudo chmod +x "/usr/local/bin/$cmd"
 
     echo "Installation complete!"
 fi
