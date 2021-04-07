@@ -24,10 +24,10 @@ curl -sL https://deb.nodesource.com/setup_14.x | bash -
 
 # Installing
 apt install -y nodejs
-# ----- End installing NodeJS v14
+# ----- Finish installing NodeJS v14 -----
 
 
-# ----- Cloning the github repo
+# ----- Cloning the github repo -----
 
 # If git isn't installed, it will be installed
 apt install -y git
@@ -42,10 +42,15 @@ cd ~/.WingsConsole
 # Removes install.sh after cloning the repo
 rm ~/.WingsConsole/install.sh
 
+# ----- Finish cloning the github repo -----
+
+# ----- Setting up depencencies -----
 echo "----- Setting up dependencies... -----"
 
 # Running npm i --save to setup the dependencies
 npm i --save
+
+# ----- Finish setting up dependencies -----
 
 # ----- Begin setting up the custom terminal command -----
 echo "Default command is \"console\". Would you like to change it?"
@@ -71,8 +76,7 @@ if [ $conf == "y" ]; then
     fi
 fi
 
-# Creating the command in /usr/local/bin"
-# Testing to see if somehow /usr/local/bin is not a directory
+# Testing if somehow /usr/local/bin is not a directory (Usually when using raw Termux)
 if [ -d "/usr/local/bin" ]; then
     echo "Working..."
 else
@@ -82,13 +86,21 @@ else
     exit 2
 fi
 
+
+# Creating the custom command
 if [ -z "$cmd" ]; then
+    # Creating the file
     echo "cd ~/.WingsConsole; node ." >> "/usr/local/bin/console"
+    
+    # Giving execution permissions to the file
     chmod +x "/usr/local/bin/console"
 
     echo "Installation complete!"
 else
+    # Creating the file
     echo "cd ~/.WingsConsole; node ." >> "/usr/local/bin/$cmd"
+    
+    # Giving execution permissions to the file
     chmod +x "/usr/local/bin/$cmd"
 
     echo "Installation complete!"
