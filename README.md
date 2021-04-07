@@ -65,3 +65,39 @@ sh -c "$(curl -fsSL https://raw.githubusercontent.com/S0raWasTaken/WingsConsole/
 > Or leave an issue in the Issues page  
 > `S0ra#2255`  
 
+## Uninstallation Process
+
+### If you are on linux and installed it using the install script:
+- Delete the folder ~/.WingsConsole
+```sh
+rm -r ~/.WingsConsole
+```
+- Delete the custom command in /usr/local/bin
+  - Do not delete the entire folder tho
+```sh
+# Your custom command file by default should be "console" unless you specified another name for it
+# So, by default:
+sudo rm /usr/local/bin/console
+# If you did specify another name for it:
+sudo rm /usr/local/bin/COMMAND_NAME
+```
+- And you're done!
+- Also if you want to remove nodejs from your system:
+```sh
+sudo apt remove nodejs
+```
+
+### If you didn't install it using the install script:
+> Same applies to Windows users
+- Simply delete your installation folder
+
+- If you want to uninstall nodejs:
+  - Linux users:
+  ```sh
+  sudo apt remove nodejs
+  ```
+  - Windows users:
+    - Open your file manager
+    - Go to C:\Program Files (or D:\ depending if you installed it on a separate disk or partition)
+    - Locate the "nodejs" folder
+    - Delete it 
