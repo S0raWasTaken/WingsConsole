@@ -3,45 +3,56 @@
 # Installation script for the WingsConsole
 # Made by S0raWasTaken
 
-# Please do not execute this script before understanding what it does
+# ----- Please do not execute this script before understanding what it does -----
 
-# Check if the user is running the script with superuser permissions
+# Checks if the user is running the script with superuser permissions
 if [ "$EUID" -ne 0 ]; then
     echo "This is an installation script, please run it as a superuser"
     echo "Also, don't forget to read it first!"
     exit 2
 fi
 
-# Begin installation of NodeJS v14
+# ----- Begin installation of NodeJS v14 -----
 
-apt update # running apt update for a safe install
-apt install -y curl # if curl isn't installed, it will be installed
+# Running apt update for a safe install
+apt update
+# If curl isn't installed, it will be installed
+apt install -y curl
 
+# Adding NodeJS v14 repo
 curl -sL https://deb.nodesource.com/setup_14.x | bash -
 
+# Installing
 apt install -y nodejs
+# ----- End installing NodeJS v14
 
-# Cloning git repo
 
-apt install -y git # if git isn't installed, it will be isntalled
+# ----- Cloning the github repo
+
+# If git isn't installed, it will be installed
+apt install -y git
 git clone https://github.com/S0raWasTaken/WingsConsole.git
 
-mv WingsConsole ~/.WingsConsole # Move the cloned repo to the home directory
+# Move the cloned repo to the home directory
+# Hidden folder, but can be accessed using "cd ~/.WingsConsole"
+mv WingsConsole ~/.WingsConsole
 
 cd ~/.WingsConsole
-echo "Setting up dependencies..."
+
+# Removes install.sh after cloning the repo
+rm ~/.WingsConsole/install.sh
+
+echo "----- Setting up dependencies... -----"
 
 # Running npm i --save to setup the dependencies
-
 npm i --save
 
-# Setting up the command to summon the app
-
+# ----- Begin setting up the custom terminal command -----
 echo "Default command is \"console\". Would you like to change it?"
 echo "Y/N"
 read conf
 
-# In case the user wants a custom command
+# If the user wants a custom command
 if [ $conf == "y" ]; then
     echo "Which command would you prefer?"
     echo "Minimum length: 3"
@@ -82,9 +93,15 @@ else
 
     echo "Installation complete!"
 fi
+# ----- Finish setting up the custom command -----
+
+# Final steps
 echo ""
 echo "Your installation can be found on ~/.WingsConsole"
 echo "Please edit the config.yml in it before running the command"
 echo "~~ Tip: nano ~/.WingsConsole/config.yml ~~"
+echo ""
+echo "Your custom command is located in /usr/local/bin"
+echo "You can simply change the custom command by changing the file name"
+echo "~~ Tip: mv /usr/local/bin/YOUR_OLD_COMMAND /usr/local/bin/YOUR_NEW_COMMAND ~~"
 
-echo " command was defined in /usr/local/bin"
