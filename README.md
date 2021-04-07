@@ -58,7 +58,7 @@ I left comments inside it, so you can easily know what's going on
 # Make sure you have cURL installed, else run "sudo apt install curl"  
  
 sh -c "$(curl -fsSL https://raw.githubusercontent.com/S0raWasTaken/WingsConsole/master/install.sh)"  
-# Do not run this command with "sudo" or root user, unless you know what you're doing
+# Do not run this command with "sudo" or as a root user, unless you know what you're doing
 ```  
 
 > Please contact me on Discord if any errors occur running this script  
