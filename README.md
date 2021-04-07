@@ -55,9 +55,10 @@ I left comments inside it, so you can easily know what's going on
 
  - Simply download it and run using  
  ```sh  
- # Make sure you have cURL installed, else run "sudo apt install curl"  
+# Make sure you have cURL installed, else run "sudo apt install curl"  
  
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/S0raWasTaken/WingsConsole/master/install.sh)"  
+sudo sh -c "$(curl -fsSL https://raw.githubusercontent.com/S0raWasTaken/WingsConsole/master/install.sh)"  
+# If you read the install script carefully, you know why it should be running as Super User
 ```  
 
 > Please contact me on Discord if any errors occur running this script  
